@@ -16,6 +16,8 @@
 		$camogm_running = false;
 		
 		
+	$camogm_state = "none";	
+	$camogm_fileframeduration = 0;
 	//camogm data		
 	if ($camogm_running) {
 		$pipe="/var/state/camogm.state";
@@ -64,6 +66,7 @@
 		// Load data from XML
 		$camogm_format = substr($logdata[0]['format'], 1, strlen($logdata[0]['format'])-2);
 		$camogm_fileframeduration = substr($logdata[0]['frame_number'], 0, strlen($logdata[0]['frame_number']));
+		$camogm_state = substr($logdata[0]['state'], 1, strlen($logdata[0]['state'])-2);
 	}			
 		
 	header("Content-Type: text/xml");
@@ -81,14 +84,27 @@
 	else
 		echo "<camogm>not running</camogm>";		
 
+
+	echo "<camogm_state>".$camogm_state."</camogm_state>";
+
 	if ($camogm_running)
 		echo "<camogm_format>".$camogm_format."</camogm_format>";
 		
 	$disk = "/var/hdd";
-	$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
-	$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
-	$hdd_ratio = $hdd_freespace / $hdd_totalspace;
-	echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
+	
+	$hdd_mounted = false;
+	exec('mount', $mount_ret); 
+	if (strpos(implode("", $mount_ret), "/var/hdd"))
+		$hdd_mounted = true;
+	
+	if ($hdd_mounted) {
+		$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
+		$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
+		$hdd_ratio = $hdd_freespace / $hdd_totalspace;
+		echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
+	}
+	else
+		echo "<hdd_freespaceratio>not mounted</hdd_freespaceratio>";
 	
 	echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
 	echo "</elphel_vision_data>\n";	
