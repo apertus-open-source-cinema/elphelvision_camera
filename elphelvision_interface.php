@@ -25,23 +25,6 @@ if ($cmd == "run_camogm")
 		exec('camogm /var/state/camogm_cmd > /dev/null 2>&1 &'); // "> /dev/null 2>&1 &" makes sure it is really really run as a background job that does not wait for input
 }
 
-if ($cmd == "start")
-{
-	echo "<command>".$cmd."</command>";
-	echo "<".$cmd.">";
-	
-	fprintf($fcmd,"start;\n");
-}
-if ($cmd == "stop")
-{
-	echo "<command>".$cmd."</command>";
-	echo "<".$cmd.">";
-	
-	fprintf($fcmd,"stop;\n");
-}
-
-	
-	
 $camogm_state = "none";	
 $camogm_fileframeduration = 0;
 //camogm data		
@@ -97,42 +80,58 @@ if ($camogm_running) {
 	
 header("Content-Type: text/xml");
 header("Pragma: no-cache\n");
-
 echo "<?xml version=\"1.0\"?>\n";
 echo "<elphel_vision_data>\n";
-echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
-echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
-echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
-echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 
-if ($camogm_running)
-	echo "<camogm>running</camogm>";
-else
-	echo "<camogm>not running</camogm>";		
+switch ($cmd) {
+	case "camogmstate":
+		echo "<camogm_state>".$camogm_state."</camogm_state>";
+		break;	
 
+	case "fileframeduration":
+		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
+		break;	
 
-echo "<camogm_state>".$camogm_state."</camogm_state>";
-
-if ($camogm_running)
-	echo "<camogm_format>".$camogm_format."</camogm_format>";
-	
-$disk = "/var/hdd";
-
-$hdd_mounted = false;
-exec('mount', $mount_ret); 
-if (strpos(implode("", $mount_ret), "/var/hdd"))
-	$hdd_mounted = true;
-
-if ($hdd_mounted) {
-	$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
-	$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
-	$hdd_ratio = $hdd_freespace / $hdd_totalspace;
-	echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
+	default:
+		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
+		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
+		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
+		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
+		
+		if ($camogm_running)
+			echo "<camogm>running</camogm>";
+		else
+			echo "<camogm>not running</camogm>";		
+		
+		
+		echo "<camogm_state>".$camogm_state."</camogm_state>";
+		
+		if ($camogm_running)
+			echo "<camogm_format>".$camogm_format."</camogm_format>";
+			
+		$disk = "/var/hdd";
+		
+		$hdd_mounted = false;
+		exec('mount', $mount_ret); 
+		if (strpos(implode("", $mount_ret), "/var/hdd"))
+			$hdd_mounted = true;
+		
+		if ($hdd_mounted) {
+			$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
+			$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
+			$hdd_ratio = $hdd_freespace / $hdd_totalspace;
+			echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
+		}
+		else
+			echo "<hdd_freespaceratio>unmounted</hdd_freespaceratio>";
+		
+		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
+		break;
 }
-else
-	echo "<hdd_freespaceratio>unmounted</hdd_freespaceratio>";
 
-echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
+
+
+
 echo "</elphel_vision_data>\n";	
 ?>
 
