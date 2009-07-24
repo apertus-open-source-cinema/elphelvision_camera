@@ -25,13 +25,19 @@ foreach($_GET as $key => $val) {
     $param[$key] = convert($val);
 }
 
-// set parameter for the next frame
-$set_frame = elphel_set_P_arr ($param, elphel_get_frame()+1);
+// parameters are set X frames in the future
+if (isset($_GET['framedelay']))
+	$frame_delay = $_GET['framedelay'];
+else
+	$frame_delay = 3; // default in 3 frames
+
+// set parameters
+$set_frame = elphel_set_P_arr ($param, elphel_get_frame() + $frame_delay);
 
 // debugging
-echo "current frame: ".elphel_get_frame()."\n";
-echo "frame with new parameters: ".$set_frame."\n";
-echo "Setting parameter "; print_r($param); echo "\n";
+echo "current frame: ".elphel_get_frame()."<br />\n";
+echo "frame with new parameters: ".$set_frame."<br />\n";
+echo "Setting parameter "; print_r($param); echo "<br />\n";
 
 
 function convert($s) {
