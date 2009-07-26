@@ -76,6 +76,7 @@ if ($camogm_running) {
 	$camogm_format = substr($logdata[0]['format'], 1, strlen($logdata[0]['format'])-2);
 	$camogm_fileframeduration = substr($logdata[0]['frame_number'], 0, strlen($logdata[0]['frame_number']));
 	$camogm_state = substr($logdata[0]['state'], 1, strlen($logdata[0]['state'])-2);
+	$record_dir = substr($logdata[0]['prefix'], 1, strlen($logdata[0]['prefix'])-2);
 }			
 	
 header("Content-Type: text/xml");
@@ -120,6 +121,7 @@ switch ($cmd) {
 			$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
 			$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
 			$hdd_ratio = $hdd_freespace / $hdd_totalspace;
+			echo "<record_directory>".$record_dir."</record_directory>";
 			echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
 		}
 		else
