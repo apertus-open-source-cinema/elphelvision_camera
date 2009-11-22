@@ -152,6 +152,12 @@ switch ($cmd) {
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
 		echo "<binning>".elphel_get_P_value(ELPHEL_BIN_HOR)."</binning>\n";
+		
+		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 64)
+			$binning_mode = "average";
+		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 96)
+			$binning_mode = "additive";
+		echo "<binning_mode>".$binning_mode."</binning_mode>\n";
 
 		
 		if ($camogm_running)
