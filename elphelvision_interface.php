@@ -151,6 +151,8 @@ switch ($cmd) {
 		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
+		echo "<binning>".elphel_get_P_value(ELPHEL_BIN_HOR)."</binning>\n";
+
 		
 		if ($camogm_running)
 			echo "<camogm>running</camogm>";
