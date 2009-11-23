@@ -20,16 +20,22 @@
  *!
 -----------------------------------------------------------------------------**/
 
-$param = array();
-foreach($_GET as $key => $val) {
-    $param[$key] = convert($val);
-}
-
 // parameters are set X frames in the future
 if (isset($_GET['framedelay']))
 	$frame_delay = $_GET['framedelay'];
 else
 	$frame_delay = 3; // default in 3 frames
+
+// special case for Binning Mode setting
+if (isset($_GET['BINNINGMODE']))
+	elphel_set_P_value(ELPHEL_SENSOR_REGS+32, $_GET['BINNINGMODE'], elphel_get_frame() + $frame_delay);
+
+$param = array();
+foreach($_GET as $key => $val) {
+    $param[$key] = convert($val);
+}
+
+
 
 // set parameters
 $set_frame = elphel_set_P_arr ($param, elphel_get_frame() + $frame_delay);
