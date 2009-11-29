@@ -117,10 +117,14 @@ switch ($cmd) {
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
-		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
+		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000SLIM)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
 		echo "<binning>".elphel_get_P_value(ELPHEL_BIN_HOR)."</binning>\n";
+		echo "<fliph>".elphel_get_P_value(ELPHEL_FLIPH)."</fliph>\n";
+		echo "<flipv>".elphel_get_P_value(ELPHEL_FLIPV)."</flipv>\n";
+		echo "<sat_red>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_RED)."</sat_red>\n";
+		echo "<sat_blue>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_BLUE)."</sat_blue>\n";
 
 		
 		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 64)
