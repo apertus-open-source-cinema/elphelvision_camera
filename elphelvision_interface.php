@@ -125,7 +125,10 @@ switch ($cmd) {
 		echo "<flipv>".elphel_get_P_value(ELPHEL_FLIPV)."</flipv>\n";
 		echo "<sat_red>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_RED)."</sat_red>\n";
 		echo "<sat_blue>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_BLUE)."</sat_blue>\n";
-
+		echo "<gain>".elphel_get_P_value(ELPHEL_GAING)."</gain>\n";
+		echo "<gain>".elphel_get_P_value(ELPHEL_GAING)."</gain>\n";
+		echo "<gain_r>".elphel_get_P_value(ELPHEL_GAINR)."</gain_r>\n";
+		echo "<gain_b>".elphel_get_P_value(ELPHEL_GAINB)."</gain_b>\n";
 		
 		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 64)
 			$binning_mode = "average";
