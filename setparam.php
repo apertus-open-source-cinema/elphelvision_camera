@@ -26,37 +26,63 @@ if (isset($_GET['framedelay']))
 else
 	$frame_delay = 3; // default in 3 frames
 
-// special case for Binning Mode setting
-if (isset($_GET['BINNINGMODE']))
+
+if (isset($_GET['BINNINGMODE'])) { // special case for Binning Mode setting
 	elphel_set_P_value(ELPHEL_SENSOR_REGS+32, $_GET['BINNINGMODE'], elphel_get_frame() + $frame_delay);
+} else if (isset($_GET['RECORDFORMAT'])) { // special case for setting Recording Container
+	// is camogm running
+	$camogm_running = false;
+	exec('ps | grep "camogm"', $arr); 
+	function low_daemon($v)
+	{
+		return (substr($v, -1) != ']');
+	}
+	
+	$p = (array_filter($arr, "low_daemon"));
+	$check = implode("<br />",$p);
+	
+	if (strstr($check, "camogm /var/state/camogm_cmd"))
+		$camogm_running = true;
+	else
+		$camogm_running = false;
 
-$param = array();
-foreach($_GET as $key => $val) {
-    $param[$key] = convert($val);
+	$pipe="/var/state/camogm.state";
+	$cmd_pipe="/var/state/camogm_cmd";
+	$mode=0777;
+	if(!file_exists($pipe)) {
+		umask(0);
+		posix_mkfifo($pipe,$mode);
+	}
+	$fcmd = fopen($cmd_pipe, "w");
+	if ($camogm_running) {
+		fprintf($fcmd, "format=%s;\n", $_GET['RECORDFORMAT']);
+	}
+	fclose($fcmd);
+} else { // all other Parameters
+	$param = array();
+	foreach($_GET as $key => $val) {
+		$param[$key] = convert($val);
+	}
+
+	// set parameters
+	$set_frame = elphel_set_P_arr ($param, elphel_get_frame() + $frame_delay);
+	
+	// debugging
+	echo "current frame: ".elphel_get_frame()."<br />\n";
+	echo "frame with new parameters: ".$set_frame."<br />\n";
+	echo "Setting parameter "; print_r($param); echo "<br />\n";
 }
-
-
-
-// set parameters
-$set_frame = elphel_set_P_arr ($param, elphel_get_frame() + $frame_delay);
-
-// debugging
-echo "current frame: ".elphel_get_frame()."<br />\n";
-echo "frame with new parameters: ".$set_frame."<br />\n";
-echo "Setting parameter "; print_r($param); echo "<br />\n";
-
 
 function convert($s) {
-    // clean up
-    $s = trim($s, "\" ");
+	// clean up
+	$s = trim($s, "\" ");
    
-    // check if value is in HEX
-    if(strtoupper(substr($s, 0, 2))=="0X")
-        return intval(hexdec($s));
-    else
-        return intval($s);
+	// check if value is in HEX
+	if(strtoupper(substr($s, 0, 2))=="0X")
+		return intval(hexdec($s));
+	else
+		return intval($s);
 }
-
 ?>
 
 
