@@ -125,8 +125,8 @@ switch ($cmd) {
 		echo "<flipv>".elphel_get_P_value(ELPHEL_FLIPV)."</flipv>\n";
 		echo "<sat_red>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_RED)."</sat_red>\n";
 		echo "<sat_blue>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_BLUE)."</sat_blue>\n";
-		echo "<gain>".elphel_get_P_value(ELPHEL_GAING)."</gain>\n";
-		echo "<gain>".elphel_get_P_value(ELPHEL_GAING)."</gain>\n";
+		echo "<gain_g>".elphel_get_P_value(ELPHEL_GAING)."</gain_g>\n";
+		echo "<gain_gb>".elphel_get_P_value(ELPHEL_GAINGB)."</gain_gb>\n";
 		echo "<gain_r>".elphel_get_P_value(ELPHEL_GAINR)."</gain_r>\n";
 		echo "<gain_b>".elphel_get_P_value(ELPHEL_GAINB)."</gain_b>\n";
 		
