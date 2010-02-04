@@ -26,6 +26,12 @@
 $imgsrv = 'http://'.$_SERVER['HTTP_HOST'].':8081';
 $ahead = 3;
 $delay = 5;
+$file_prefix = "still_";
+$file_extension = ".jpg";
+$file_targetdir = "/var/hdd/stills/";
+$file_index = 1;
+$file_numberpadding = 3;
+$pad = "";
 
 $parsForSnap = array('COLOR'    =>  1,
                      'QUALITY'  =>  1);
@@ -36,6 +42,15 @@ foreach($_GET as $key=>$value) switch ($key){
 		break;
 	case 'delay':
 		$delay=myval($value);
+		break;
+	case 'path':
+		$file_targetdir = $value;
+		break;
+	case 'filename':
+		$file_prefix = $value;
+		break;
+	case 'extension':
+		$file_extension = $value;
 		break;
 	default:  /// treat as camera native parameters
 		$parsForSnap[$key] = myval($value);
@@ -92,13 +107,6 @@ while($meta['frame'] > $pgmFrameNumber) {
 
 // Save Image
 
-$file_prefix = "still_";
-$file_extension = ".jpg";
-$file_targetdir = "/var/hdd/stills/";
-$file_index = 1;
-$file_numberpadding = 3;
-$pad = "";
-
 if (!file_exists($file_targetdir))
 	exec('mkdir '.$file_targetdir);
 
@@ -143,8 +151,9 @@ elphel_set_P_arr ($parsSaved,   $pgmFrameNumber + $delay);
 
 
 function myval ($s) {
-  $s=trim($s,"\" ");
-  if (strtoupper(substr($s,0,2))=="0X")   return intval(hexdec($s));
+  $s = trim($s,"\" ");
+  if (strtoupper(substr($s,0,2)) == "0X")   
+	return intval(hexdec($s));
   else return intval($s);
 }
 
