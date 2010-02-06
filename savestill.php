@@ -25,6 +25,12 @@
 
 $starttime = microtime_float();
 
+header("Content-Type: text/xml");
+header("Pragma: no-cache\n");
+
+echo "<?xml version=\"1.0\"?>\n";
+
+
 $imgsrv = 'http://'.$_SERVER['HTTP_HOST'].':8081';
 $ahead = 3;
 $delay = 5;
@@ -62,14 +68,14 @@ foreach($_GET as $key=>$value) switch ($key){
 $parsSaved = elphel_get_P_arr($parsForSnap);
 
 //debug
-echo "before:<br><pre>";
-print_r ($parsSaved);
-echo "</pre><br>";
+//echo "before:<br><pre>";
+//print_r ($parsSaved);
+//echo "</pre><br>";
 
 //debug
-echo "for still:<br><pre>";
-print_r ($parsForSnap);
-echo "</pre>";
+//echo "for still:<br><pre>";
+//print_r ($parsForSnap);
+//echo "</pre>";
 
 $thisFrameNumber = elphel_get_frame();
 if ($ahead>5) {
@@ -140,19 +146,22 @@ while (1) {
 	$path = $file_targetdir.$file_prefix.$pad.$file_index.$file_extension;
 }
 
-//debug
-echo "path: ".$path."<br>";
+//xml output
+echo "<SaveStill>";
+echo "<path>".$path."</path>";
 
 exec('wget '.$imgsrv.'/img -O '.$path);
 
-echo "size: ".filesize($path)."<br>";
+echo "<size>".filesize($path)."</size>";
 
 ///set original parameters ($delay frames later)
 elphel_wait_frame_abs($thisFrameNumber + $delay);
 elphel_set_P_arr ($parsSaved,   $pgmFrameNumber + $delay);
 
 $delta_t = round(microtime_float() - $starttime, 3);
-echo "saving took: ".$delta_t." seconds<br>";
+echo "<save_duration>".$delta_t."</save_duration>";
+
+echo "</SaveStill>";
 
 function myval ($s) {
   $s = trim($s,"\" ");
