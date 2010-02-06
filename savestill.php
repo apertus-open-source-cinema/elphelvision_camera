@@ -23,6 +23,8 @@
 *! -----------------------------------------------------------------------------**
 */
 
+$starttime = microtime_float();
+
 $imgsrv = 'http://'.$_SERVER['HTTP_HOST'].':8081';
 $ahead = 3;
 $delay = 5;
@@ -149,12 +151,20 @@ echo "size: ".filesize($path)."<br>";
 elphel_wait_frame_abs($thisFrameNumber + $delay);
 elphel_set_P_arr ($parsSaved,   $pgmFrameNumber + $delay);
 
+$delta_t = round(microtime_float() - $starttime, 3);
+echo "saving took: ".$delta_t." seconds<br>";
 
 function myval ($s) {
   $s = trim($s,"\" ");
   if (strtoupper(substr($s,0,2)) == "0X")   
 	return intval(hexdec($s));
   else return intval($s);
+}
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
 }
 
 ?>
