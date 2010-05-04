@@ -114,8 +114,8 @@ switch ($cmd) {
 		$selector = $_GET['selector'];
 		echo "<camogm_format_media>".$selector."</camogm_format_media>";
 		echo "<filesystem>ext2</filesystem>";
-		//exec('fdisk /dev/hda') 
-		//exec('mkfs.ext2 /dev/hda1') 
+		//exec('fdisk /dev/hda')
+		//exec('mkfs.ext2 /dev/hda1')
 		break;	
 	case "fileframeduration":
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
@@ -124,7 +124,7 @@ switch ($cmd) {
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
-		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000SLIM)."</fps>\n";
+		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
 		echo "<binning>".elphel_get_P_value(ELPHEL_BIN_HOR)."</binning>\n";
