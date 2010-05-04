@@ -98,6 +98,8 @@ if ($camogm_running) {
 	$camogm_fileframeduration = substr($logdata[0]['frame_number'], 0, strlen($logdata[0]['frame_number']));
 	$camogm_state = substr($logdata[0]['state'], 1, strlen($logdata[0]['state'])-2);
 	$record_dir = substr($logdata[0]['prefix'], 1, strlen($logdata[0]['prefix'])-2);
+	$file_duration = substr($logdata[0]['file_duration'], 0, strlen($logdata[0]['file_duration'])); // seconds
+	$file_length = substr($logdata[0]['file_length'], 0, strlen($logdata[0]['file_length'])); // filesize
 }			
 	
 header("Content-Type: text/xml");
@@ -172,6 +174,15 @@ switch ($cmd) {
 			echo "<hdd_freespaceratio>unmounted</hdd_freespaceratio>";
 		
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
+		echo "<camogm_fileduration>".$file_duration."</camogm_fileduration>";
+		echo "<camogm_filesize>".$file_length."</camogm_filesize>";
+		echo "<camogm_datarate>";
+		if ($file_duration == 0)
+			echo "0";
+		else
+			echo round($file_length/1024/1024/$file_duration*8, 1);
+		echo "</camogm_datarate>";
+
 		break;
 }
 
