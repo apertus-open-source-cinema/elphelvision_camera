@@ -100,6 +100,9 @@ if ($camogm_running) {
 	$record_dir = substr($logdata[0]['prefix'], 1, strlen($logdata[0]['prefix'])-2);
 	$file_duration = substr($logdata[0]['file_duration'], 0, strlen($logdata[0]['file_duration'])); // seconds
 	$file_length = substr($logdata[0]['file_length'], 0, strlen($logdata[0]['file_length'])); // filesize
+	$max_duration = substr($logdata[0]['max_duration'], 0, strlen($logdata[0]['max_duration'])); // max_duration in seconds
+	$max_length = substr($logdata[0]['max_length'], 0, strlen($logdata[0]['max_length'])); // max_length in bytes
+	$max_frames = substr($logdata[0]['max_frames'], 0, strlen($logdata[0]['max_frames'])); // max_frames in number of frames
 }			
 	
 header("Content-Type: text/xml");
@@ -110,8 +113,7 @@ echo "<elphel_vision_data>\n";
 switch ($cmd) {
 	case "camogmstate":
 		echo "<camogm_state>".$camogm_state."</camogm_state>";
-		break;	
-
+		break;
 	case "format_media":
 		$selector = $_GET['selector'];
 		echo "<camogm_format_media>".$selector."</camogm_format_media>";
@@ -122,14 +124,12 @@ switch ($cmd) {
 	case "fileframeduration":
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
 		break;	
-
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
 		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
-		echo "<binning>".elphel_get_P_value(ELPHEL_BIN_HOR)."</binning>\n";
 		echo "<fliph>".elphel_get_P_value(ELPHEL_FLIPH)."</fliph>\n";
 		echo "<flipv>".elphel_get_P_value(ELPHEL_FLIPV)."</flipv>\n";
 		echo "<sat_red>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_RED)."</sat_red>\n";
@@ -139,17 +139,10 @@ switch ($cmd) {
 		echo "<gain_r>".elphel_get_P_value(ELPHEL_GAINR)."</gain_r>\n";
 		echo "<gain_b>".elphel_get_P_value(ELPHEL_GAINB)."</gain_b>\n";
 		
-		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 64)
-			$binning_mode = "average";
-		if (elphel_get_P_value(ELPHEL_SENSOR_REGS+32) == 96)
-			$binning_mode = "additive";
-		echo "<binning_mode>".$binning_mode."</binning_mode>\n";
-
 		if ($camogm_running)
 			echo "<camogm>running</camogm>";
 		else
 			echo "<camogm>not running</camogm>";		
-		
 		
 		echo "<camogm_state>".$camogm_state."</camogm_state>";
 		
@@ -176,6 +169,9 @@ switch ($cmd) {
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
 		echo "<camogm_fileduration>".$file_duration."</camogm_fileduration>";
 		echo "<camogm_filesize>".$file_length."</camogm_filesize>";
+		echo "<camogm_max_duration>".$max_duration."</camogm_max_duration>";
+		echo "<camogm_max_length>".$max_length."</camogm_max_length>";
+		echo "<camogm_max_frames>".$max_frames."</camogm_max_frames>";
 		echo "<camogm_datarate>";
 		if ($file_duration == 0)
 			echo "0";
