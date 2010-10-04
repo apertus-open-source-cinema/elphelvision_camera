@@ -130,6 +130,7 @@ switch ($cmd) {
 		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
+		echo "<auto_exposure>".elphel_get_P_value(ELPHEL_AUTOEXP_ON)."</auto_exposure>\n";
 		echo "<fliph>".elphel_get_P_value(ELPHEL_FLIPH)."</fliph>\n";
 		echo "<flipv>".elphel_get_P_value(ELPHEL_FLIPV)."</flipv>\n";
 		echo "<sat_red>".elphel_get_P_value(ELPHEL_COLOR_SATURATION_RED)."</sat_red>\n";
