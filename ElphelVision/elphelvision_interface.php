@@ -123,10 +123,7 @@ switch ($cmd) {
 		break;	
 	case "fileframeduration":
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
-		break;
-	case "create_symlink":
-		exec('ln -s /var/hdd /mnt/flash/html/hdd');
-		break;
+		break;	
 	case "list_files":
 		if (!file_exists('/mnt/flash/html/hdd')) {
 			echo "no webshare found";
@@ -180,7 +177,7 @@ switch ($cmd) {
 		}
 		else
 			echo "no webshare found<br>";
-		break;	
+		break;
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
@@ -219,6 +216,7 @@ switch ($cmd) {
 			$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
 			$hdd_ratio = $hdd_freespace / $hdd_totalspace;
 			echo "<record_directory>".$record_dir."</record_directory>";
+			echo "<hdd_freespaceratio>".$hdd_freespace."</hdd_freespaceratio>";
 			echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
 		}
 		else
