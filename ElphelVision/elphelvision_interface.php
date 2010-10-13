@@ -216,7 +216,7 @@ switch ($cmd) {
 			$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
 			$hdd_ratio = $hdd_freespace / $hdd_totalspace;
 			echo "<record_directory>".$record_dir."</record_directory>";
-			echo "<hdd_freespaceratio>".$hdd_freespace."</hdd_freespaceratio>";
+			echo "<hdd_freespace>".$hdd_freespace."</hdd_freespace>";
 			echo "<hdd_freespaceratio>".round($hdd_ratio*100, 2)."</hdd_freespaceratio>";
 		}
 		else
