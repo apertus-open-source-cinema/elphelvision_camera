@@ -123,7 +123,10 @@ switch ($cmd) {
 		break;	
 	case "fileframeduration":
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
-		break;	
+		break;
+	case "create_symlink":
+		exec('ln -s /var/hdd /mnt/flash/html/hdd');
+		break;
 	case "list_files":
 		if (!file_exists('/mnt/flash/html/hdd')) {
 			echo "no webshare found";
@@ -177,7 +180,7 @@ switch ($cmd) {
 		}
 		else
 			echo "no webshare found<br>";
-		break;
+		break;	
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
