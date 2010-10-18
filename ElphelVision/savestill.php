@@ -78,7 +78,7 @@ $parsSaved = elphel_get_P_arr($parsForSnap);
 //echo "</pre>";
 
 $thisFrameNumber = elphel_get_frame();
-if ($ahead>5) {
+if ($ahead > 5) {
 	elphel_wait_frame_abs($thisFrameNumber + $ahead - 5);
 	$ahead -= 5;
 	$thisFrameNumber = elphel_get_frame();
@@ -86,13 +86,13 @@ if ($ahead>5) {
 
 $pgmFrameNumber = $thisFrameNumber + $ahead;
 
-///set modified parameters to the camera
+//send modified parameters to the camera
 elphel_set_P_arr ($parsForSnap, $pgmFrameNumber);
 
-/// Wait for the frame to be acquired
+// wait for the frame to be acquired
 elphel_wait_frame_abs($pgmFrameNumber + 2); /// the frame should be in circbuf by then
 
-$circbuf_pointers=elphel_get_circbuf_pointers(1); /// 1 - skip the vary oldest frame
+$circbuf_pointers = elphel_get_circbuf_pointers(1); /// 1 - skip the oldest frame
 $meta = end($circbuf_pointers);
 if (!count($circbuf_pointers) || ($meta['frame'] < $pgmFrameNumber)) {
 	echo "compressor is turned off";
@@ -100,7 +100,7 @@ if (!count($circbuf_pointers) || ($meta['frame'] < $pgmFrameNumber)) {
 	exit (0);
 }
 
-/// look in the circbuf array (in case we already missed it and it is not the latest)
+// look in the circbuf array (in case we already missed it and it is not the latest)
 while($meta['frame'] > $pgmFrameNumber) {
 	if (!prev($circbuf_pointers)) { /// failed to find the right frame in circbuf - probably overwritten
 		printf ("<pre>could not find the frame %d(0x%x) in the circbuf:\n", $pgmFrameNumber, $pgmFrameNumber);
@@ -112,8 +112,7 @@ while($meta['frame'] > $pgmFrameNumber) {
 }
 
 
-
-// Save Image
+// create folders
 
 if (!file_exists($file_targetdir))
 	exec('mkdir '.$file_targetdir);
@@ -150,7 +149,9 @@ while (1) {
 echo "<SaveStill>";
 echo "<path>".$path."</path>";
 
-exec('wget '.$imgsrv.'/img -O '.$path);
+// Save Image
+//echo $imgsrv.'/'.$meta['circbuf_pointer'].'/bimg';
+ exec('wget '.$imgsrv.'/'.$meta['circbuf_pointer'].'/bimg -O '.$path);
 
 echo "<size>".filesize($path)."</size>";
 
