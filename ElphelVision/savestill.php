@@ -42,6 +42,10 @@ $file_numberpadding = 3;
 $pad = "";
 
 $parsForSnap = array('COLOR'    =>  1,
+		     'WOI_LEFT'    =>  1,
+		     'WOI_TOP'    =>  1,
+		     'WOI_WIDTH'    =>  1,
+		     'WOI_HEIGHT'    =>  1,
                      'QUALITY'  =>  1);
 
 foreach($_GET as $key=>$value) switch ($key){
@@ -57,7 +61,7 @@ foreach($_GET as $key=>$value) switch ($key){
 	case 'filename':
 		$file_prefix = $value;
 		break;
-	case 'extension':
+	case 'EXTENSION':
 		$file_extension = $value;
 		break;
 	default:  /// treat as camera native parameters
