@@ -234,7 +234,7 @@ switch ($cmd) {
 		else
 			echo round($file_length/1024/1024/$file_duration*8, 1);
 		echo "</camogm_datarate>";
-
+		echo "<coringindex>".elphel_get_P_value(ELPHEL_CORING_INDEX)."</coringindex>";
 		break;
 }
 
