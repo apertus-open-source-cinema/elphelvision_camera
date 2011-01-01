@@ -2,7 +2,7 @@
 /*!***************************************************************************
 *! FILE NAME  : elphelvision_interface.php
 *! DESCRIPTION: interface for the ElphelVision viewfinder software for Apertus open cinema camera
-*! Copyright (C) 2009 Apertus
+*! Copyright (C) 2009-2011 Apertus
 *! -----------------------------------------------------------------------------**
 *!
 *!  This program is free software: you can redistribute it and/or modify
@@ -103,6 +103,8 @@ if ($camogm_running) {
 	$max_duration = substr($logdata[0]['max_duration'], 0, strlen($logdata[0]['max_duration'])); // max_duration in seconds
 	$max_length = substr($logdata[0]['max_length'], 0, strlen($logdata[0]['max_length'])); // max_length in bytes
 	$max_frames = substr($logdata[0]['max_frames'], 0, strlen($logdata[0]['max_frames'])); // max_frames in number of frames
+	$frameskip = substr($logdata[0]['frames_skip'], 0, strlen($logdata[0]['frames_skip'])); // frame skip count
+	$secondsskip = substr($logdata[0]['seconds_skip'], 0, strlen($logdata[0]['seconds_skip'])); // seconds skip - timelapse
 }			
 	
 header("Content-Type: text/xml");
@@ -228,6 +230,8 @@ switch ($cmd) {
 		echo "<camogm_max_duration>".$max_duration."</camogm_max_duration>";
 		echo "<camogm_max_length>".$max_length."</camogm_max_length>";
 		echo "<camogm_max_frames>".$max_frames."</camogm_max_frames>";
+		echo "<camogm_frameskip>".$frameskip."</camogm_frameskip>";
+		echo "<camogm_secondsskip>".$secondsskip."</camogm_secondsskip>";
 		echo "<camogm_datarate>";
 		if ($file_duration == 0)
 			echo "0";
