@@ -105,6 +105,8 @@ if ($camogm_running) {
 	$max_frames = substr($logdata[0]['max_frames'], 0, strlen($logdata[0]['max_frames'])); // max_frames in number of frames
 	$frameskip = substr($logdata[0]['frames_skip'], 0, strlen($logdata[0]['frames_skip'])); // frame skip count
 	$secondsskip = substr($logdata[0]['seconds_skip'], 0, strlen($logdata[0]['seconds_skip'])); // seconds skip - timelapse
+	$bufferoverruns = substr($logdata[0]['buffer_overruns'], 0, strlen($logdata[0]['buffer_overruns'])); // buffer overruns
+	$last_error_code = substr($logdata[0]['last_error_code'], 0, strlen($logdata[0]['last_error_code'])); // last error code - what codes are there?
 }			
 	
 header("Content-Type: text/xml");
@@ -239,6 +241,8 @@ switch ($cmd) {
 			echo round($file_length/1024/1024/$file_duration*8, 1);
 		echo "</camogm_datarate>";
 		echo "<coringindex>".elphel_get_P_value(ELPHEL_CORING_INDEX)."</coringindex>";
+		echo "<bufferoverruns>".$bufferoverruns."</bufferoverruns>";
+		echo "<last_error_code>".$last_error_code."</last_error_code>";
 		break;
 }
 
