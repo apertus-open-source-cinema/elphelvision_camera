@@ -24,9 +24,14 @@
 if (!$frame) 
 	$frame = elphel_get_frame()-1;
 
+if(isset($_GET['mode']))
+	$mode = $_GET['mode'];
+else
+	$mode = "log";
+
 $colors = array(0=>"R",1=>"G",2=>"GB",3=>"B");
 $h_arr = elphel_histogram_get(0xfff, $frame);
-$offset2sum=1024+255; /// last in cumulative histogram for the same color
+$offset2sum=1024+255; // last in cumulative histogram for the same color
 
 // scale histograms always so the highest peak is not clipping
 $highest_value = 1;
@@ -38,10 +43,19 @@ for ($a=0; $a<768; $a++) {
 $a=0;
 // RED
 $color = 0;
+$base = 10;
 //printf("\npercentile for color %s:", $colors[$color]);
 for ($i=0; $i<256; $i++) {
-	printf ("%d;", $h_arr[$a]/$highest_value*256);		
-	//printf ("%d;", $h_arr[$a] / $pixelcount * 100);
+	$factor = $h_arr[$a]/$highest_value; // 0..1
+	$value = 0;
+	if ($mode == "linear") {
+		$value = $factor * 255;
+	} else if ($mode == "log") {
+		$value = log($factor*10+1, $base)*245;
+	} else {
+		die("mode not supported");
+	}
+	printf ("%d;", $value);
 	$a++;
 }
 
@@ -49,8 +63,16 @@ for ($i=0; $i<256; $i++) {
 $color = 1;
 //printf("\npercentile for color %s:", $colors[$color]);
 for ($i=0; $i<256; $i++) {
-	printf ("%d;", $h_arr[$a]/$highest_value*256);		
-	//printf ("%d;", $h_arr[$a] / $pixelcount * 100);
+	$factor = $h_arr[$a]/$highest_value; // 0..1
+	$value = 0;
+	if ($mode == "linear") {
+		$value = $factor * 255;
+	} else if ($mode == "log") {
+		$value = log($factor*10+1, $base)*245;
+	} else {
+		die("mode not supported");
+	}
+	printf ("%d;", $value);
 	$a++;
 }
 
@@ -61,7 +83,16 @@ $a += 255;
 $color = 3;
 //printf("\npercentile for color %s:", $colors[$color]);
 for ($i=0; $i<256; $i++) {
-	printf ("%d;", $h_arr[$a]/$highest_value*256);		
+	$factor = $h_arr[$a]/$highest_value; // 0..1
+	$value = 0;
+	if ($mode == "linear") {
+		$value = $factor * 255;
+	} else if ($mode == "log") {
+		$value = log($factor*10+1, $base)*245;
+	} else {
+		die("mode not supported");
+	}
+	printf ("%d;", $value);
 	//printf ("%d;", $h_arr[$a] / $pixelcount * 100);
 	$a++;
 }
