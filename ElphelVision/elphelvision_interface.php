@@ -118,12 +118,22 @@ switch ($cmd) {
 	case "camogmstate":
 		echo "<camogm_state>".$camogm_state."</camogm_state>";
 		break;
+	case "init_stereo3d_master":
+		elphel_set_P_value(ELPHEL_TRIG_CONDITION, 0x0, elphel_get_frame() + 3);
+		elphel_set_P_value(ELPHEL_TRIG_PERIOD, 19200000, elphel_get_frame() + 3);
+		elphel_set_P_value(ELPHEL_TRIG, 0x4, elphel_get_frame() + 3);
+		elphel_set_P_value(ELPHEL_TRIG_OUT, 0x800000, elphel_get_frame() + 3);
+		break;
+	case "init_stereo3d_slave":
+		elphel_set_P_value(ELPHEL_TRIG_CONDITION, 0x200000, elphel_get_frame() + 3);
+		elphel_set_P_value(ELPHEL_TRIG, 0x4, elphel_get_frame() + 3);
+		break;	
 	case "format_media":
 		$selector = $_GET['selector'];
 		echo "<camogm_format_media>".$selector."</camogm_format_media>";
 		echo "<filesystem>ext2</filesystem>";
-		//exec('fdisk /dev/hda')
-		//exec('mkfs.ext2 /dev/hda1')
+		//exec('fdisk /dev/hda') // careful with these
+		//exec('mkfs.ext2 /dev/hda1') // careful with these
 		break;	
 	case "fileframeduration":
 		echo "<camogm_fileframeduration>".$camogm_fileframeduration."</camogm_fileframeduration>";
