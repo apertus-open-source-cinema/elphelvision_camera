@@ -253,6 +253,10 @@ switch ($cmd) {
 		echo "<coringindex>".elphel_get_P_value(ELPHEL_CORING_INDEX)."</coringindex>";
 		echo "<bufferoverruns>".$bufferoverruns."</bufferoverruns>";
 		echo "<last_error_code>".$last_error_code."</last_error_code>";
+		echo "<trigger>".elphel_get_P_value(ELPHEL_TRIG)."</trigger>";
+		echo "<trigger_period>".elphel_get_P_value(ELPHEL_TRIG_PERIOD)."</trigger_period>";
+		echo "<trigger_condition>".elphel_get_P_value(ELPHEL_TRIG_CONDITION)."</trigger_condition>";
+		echo "<trigger_out>".elphel_get_P_value(ELPHEL_TRIG_OUT)."</trigger_out>";
 		break;
 }
 
