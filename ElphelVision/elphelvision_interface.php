@@ -115,6 +115,48 @@ echo "<?xml version=\"1.0\"?>\n";
 echo "<elphel_vision_data>\n";
 
 switch ($cmd) {
+	case "camogmstartrecording":
+		// create new folder for the next clip
+		$Path = "/var/hdd/";
+		$Foldernameprefix = "CLIP";
+		$Index = 1;
+		$PaddedIndex = sprintf('%05d', $Index);
+		$foldername = $Path.$Foldernameprefix.$PaddedIndex."/";
+		while (file_exists($foldername)) {
+			$Index++;
+			$PaddedIndex = sprintf('%05d', $Index);
+			$foldername = $Path.$Foldernameprefix.$PaddedIndex."/";
+		}
+		mkdir($foldername);
+		
+		// tell camogm to record into the newly created folder
+		$cmd_pipe = "/var/state/camogm_cmd";
+		$fcmd = fopen($cmd_pipe, "w");
+		fprintf($fcmd, "prefix=%s;\n", $foldername);
+
+		// start camogm recording
+		fprintf($fcmd,"start;\n");
+		fclose($fcmd);
+		break;
+	case "camogmstoprecording":
+		// stop recording
+		$cmd_pipe = "/var/state/camogm_cmd";
+		$fcmd = fopen($cmd_pipe, "w");
+		fprintf($fcmd,"stop;\n");
+		fclose($fcmd);
+
+		// create md5 hash files for each file in the directory
+		if ($handle = opendir($record_dir)) {
+			while ($file = readdir($handle)) {
+				if ($file != "." && $file != ".."){
+					$MD5File = $file.".md5";
+					$fh = fopen($record_dir.$MD5File, 'w') or die("can't open file");
+					fwrite($fh, md5_file($record_dir.$file));
+					fclose($fh);
+				}
+			}
+		}
+		break;
 	case "camogmstate":
 		echo "<camogm_state>".$camogm_state."</camogm_state>";
 		break;
@@ -265,5 +307,4 @@ switch ($cmd) {
 
 echo "</elphel_vision_data>\n";	
 ?>
-
 
