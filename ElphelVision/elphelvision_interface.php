@@ -39,6 +39,10 @@ if (strstr($check, "camogm /var/state/camogm_cmd"))
 else
 	$camogm_running = false;
 
+$hdd_mounted = false;
+exec('mount', $mount_ret); 
+if (strpos(implode("", $mount_ret), "/var/hdd"))
+	$hdd_mounted = true;
 
 if ($cmd == "run_camogm")
 {
@@ -111,8 +115,8 @@ if ($camogm_running) {
 	
 header("Content-Type: text/xml");
 header("Pragma: no-cache\n");
-echo "<?xml version=\"1.0\"?>\n";
-echo "<elphel_vision_data>\n";
+echo "<?xml version=\"1.0\"?>";
+echo "<elphel_vision_data>";
 
 switch ($cmd) {
 	case "camogmstartrecording":
@@ -154,6 +158,28 @@ switch ($cmd) {
 					fwrite($fh, md5_file($record_dir.$file));
 					fclose($fh);
 				}
+			}
+		}
+		break;
+	case "setrecdir":
+		if (isset($_GET['directory'])) {
+			if ($hdd_mounted) {
+				$dirname = $_GET['directory'];
+				$Path = "/var/hdd/";
+				$foldername = $Path.$dirname."/";
+				if (file_exists($foldername)) {
+					echo "<result>folder already exists</result>";
+				} else {
+					mkdir($foldername);
+
+					// tell camogm to record into the newly created folder
+					$cmd_pipe = "/var/state/camogm_cmd";
+					$fcmd = fopen($cmd_pipe, "w");
+					fprintf($fcmd, "prefix=%s;\n", $foldername);
+					echo "<result>success</result>";
+				}
+			} else {
+				echo "<result>no HDD found</result>";
 			}
 		}
 		break;
@@ -261,12 +287,7 @@ switch ($cmd) {
 			echo "<camogm_format>".$camogm_format."</camogm_format>";
 			
 		$disk = "/var/hdd";
-		
-		$hdd_mounted = false;
-		exec('mount', $mount_ret); 
-		if (strpos(implode("", $mount_ret), "/var/hdd"))
-			$hdd_mounted = true;
-		
+			
 		if ($hdd_mounted) {
 			$hdd_totalspace = round(disk_total_space($disk)/1024/1024, 2);
 			$hdd_freespace = round(disk_free_space($disk)/1024/1024, 2);
@@ -305,6 +326,6 @@ switch ($cmd) {
 
 
 
-echo "</elphel_vision_data>\n";	
+echo "</elphel_vision_data>";	
 ?>
 
