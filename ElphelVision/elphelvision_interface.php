@@ -21,15 +21,66 @@
 *!
 */
 
+
+function low_daemon($v) {
+	return (substr($v, -1) != ']');
+}
+
+function ReadFiles($dir) {
+	$ignore = array('.', '..', 'lost+found');
+	/*	
+	if (isset($dir) && ($dir != "") && ($dir != "/./") && ($dir != "/")) {
+		echo "<file>";
+		echo "<type>updir</type>";
+		echo "<name>..</name>";
+		$file_remove_last_slash = substr($dir, 0, strlen($dir)-1);
+		$file_pos_of_second_last_slash = strrpos($file_remove_last_slash, "/");
+		$up_file = substr($dir, 0, $file_pos_of_second_last_slash+1);
+		while(strpos($up_file, "//")) {
+			$up_file = str_replace("//", "/", $up_file); 
+		}
+		if ($up_file == "")
+			echo "<path>/</path>";
+		else
+			echo "<path>".$up_file."</path>";
+		echo "<size>0</size>";
+		echo "<date>0</date>";
+		echo "</file>";
+	}*/
+
+	if ($handle = @opendir('/var/hdd/'.$dir)) {
+		while (false !== ($file = readdir($handle))) {
+			if (!in_array($file, $ignore)) { // ignore the folders from our ignore array
+				if (is_dir('/var/hdd/'.$dir.$file)) { // Its a directory, so we need to keep reading down...
+					// Re-call this same function but on a new directory.
+					// this is what makes function recursive.
+					ReadFiles($dir.$file);
+				} else {
+					echo "<file>";
+					echo "<type>";
+					echo $extension = substr($file, strrpos($file, '.') + 1, strlen($file)); 
+					echo "</type>";
+					echo "<name>".$file."</name>";
+					echo "<path>".$dir."/".$file."</path>";
+					$size = filesize("/var/hdd/".$dir."/".$file);
+					echo "<size>".$size."</size>";
+					$date = date ("d M Y H:i:s", filectime("/var/hdd/".$dir."/".$file));
+					echo "<date>".$date."</date>";
+					echo "</file>";
+				}
+			}
+		}
+		closedir($handle);
+	}
+}
+
+
 $cmd = $_GET['cmd'];
 
 // is camogm running
 $camogm_running = false;
 exec('ps | grep "camogm"', $arr); 
-function low_daemon($v)
-{
-	return (substr($v, -1) != ']');
-}
+
 
 $p = (array_filter($arr, "low_daemon"));
 $check = implode("<br />",$p);
@@ -209,56 +260,10 @@ switch ($cmd) {
 	case "list_files":
 		if (!file_exists('/mnt/flash/html/hdd')) {
 			echo "no webshare found";
-		break;
+			break;
 		}
 		$dir = $_GET["dir"];
-		
-		if (isset($dir) && ($dir != "") && ($dir != "/./") && ($dir != "/"))  // show "one level up" item if we are not in "home" directory
-		{
-			echo "<file>";
-			echo "<type>updir</type>";
-			echo "<name>..</name>";
-			$file_remove_last_slash = substr($dir, 0, strlen($dir)-1);
-			$file_pos_of_second_last_slash = strrpos($file_remove_last_slash, "/");
-			$up_file = substr($dir, 0, $file_pos_of_second_last_slash+1);
-			while(strpos($up_file, "//")) {
-				$up_file = str_replace("//", "/", $up_file); 
-			}
-			if ($up_file == "")
-				echo "<path>/</path>";
-			else
-				echo "<path>".$up_file."</path>";
-			echo "<size>0</size>";
-			echo "<date>0</date>";
-			echo "</file>";
-		}
-		
-		if ($handle = opendir('/mnt/flash/html/hdd'.$dir)) 
-		{
-			while ($file = readdir($handle))
-			{
-				if ($file != "." && $file != "..")
-				{	
-					echo "<file>";
-					echo "<type>";
-					if (is_dir("/var/hdd/".$dir.$file))
-						echo "dir";
-					else
-						echo $extension = substr($file, strrpos($file, '.')+1, strlen($file)); 
-					echo "</type>";
-					echo "<name>".$file."</name>";
-					echo "<path>".substr($dir, 1).$file."</path>";
-					$size = filesize("/var/hdd/".$dir.$file);
-					echo "<size>".$size."</size>";
-					$date = date ("d M Y H:i:s", filectime("/var/hdd/".$dir.$file));
-					echo "<date>".$date."</date>";
-					echo "</file>";
-				}
-			}
-			closedir($handle);
-		}
-		else
-			echo "no webshare found<br>";
+		ReadFiles($dir);
 		break;
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
