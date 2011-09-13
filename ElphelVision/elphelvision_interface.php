@@ -61,6 +61,7 @@ function ReadFiles($dir) {
 					echo $extension = substr($file, strrpos($file, '.') + 1, strlen($file)); 
 					echo "</type>";
 					echo "<name>".$file."</name>";
+					echo "<folder>".$dir."</folder>";
 					echo "<path>".$dir."/".$file."</path>";
 					$size = filesize("/var/hdd/".$dir."/".$file);
 					echo "<size>".$size."</size>";
