@@ -28,6 +28,7 @@ function low_daemon($v) {
 
 function ReadFiles($dir) {
 	$ignore = array('.', '..', 'lost+found');
+	$whitelistextensions = array('mov', 'jpg', 'jp4'); // only show files with these extensions 
 	/*	
 	if (isset($dir) && ($dir != "") && ($dir != "/./") && ($dir != "/")) {
 		echo "<file>";
@@ -56,9 +57,16 @@ function ReadFiles($dir) {
 					// this is what makes function recursive.
 					ReadFiles($dir.$file);
 				} else {
+					$continue = false;
+					for ($i = 0; $i < count($whitelistextensions); $i++) {
+						if (strstr($file, $whitelistextensions[$i])) {
+							$continue = true;
+						}
+					}
+				if ($continue) {
 					echo "<file>";
 					echo "<type>";
-					echo $extension = substr($file, strrpos($file, '.') + 1, strlen($file)); 
+					echo $extension = substr($file, strrpos($file, '.') + 1, strlen($file));
 					echo "</type>";
 					echo "<name>".$file."</name>";
 					echo "<folder>".$dir."</folder>";
@@ -68,6 +76,7 @@ function ReadFiles($dir) {
 					$date = date ("d M Y H:i:s", filectime("/var/hdd/".$dir."/".$file));
 					echo "<date>".$date."</date>";
 					echo "</file>";
+					}
 				}
 			}
 		}
@@ -174,14 +183,13 @@ switch ($cmd) {
 	case "camogmstartrecording":
 		// create new folder for the next clip
 		$Path = "/var/hdd/";
-		$Foldernameprefix = "CLIP";
+
+		// get the folder name as GET variable
 		$Index = 1;
-		$PaddedIndex = sprintf('%05d', $Index);
-		$foldername = $Path.$Foldernameprefix.$PaddedIndex."/";
+		$foldername = $Path.$_GET['foldername']."/";
 		while (file_exists($foldername)) {
 			$Index++;
-			$PaddedIndex = sprintf('%05d', $Index);
-			$foldername = $Path.$Foldernameprefix.$PaddedIndex."/";
+			$foldername = $Path.$_GET['foldername']."_".$Index."/";
 		}
 		mkdir($foldername);
 		
