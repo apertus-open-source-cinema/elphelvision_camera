@@ -171,6 +171,9 @@ if ($camogm_running) {
 	$frameskip = substr($logdata[0]['frames_skip'], 0, strlen($logdata[0]['frames_skip'])); // frame skip count
 	$secondsskip = substr($logdata[0]['seconds_skip'], 0, strlen($logdata[0]['seconds_skip'])); // seconds skip - timelapse
 	$bufferoverruns = substr($logdata[0]['buffer_overruns'], 0, strlen($logdata[0]['buffer_overruns'])); // buffer overruns
+	$bufferfree = substr($logdata[0]['buffer_free'], 0, strlen($logdata[0]['buffer_free'])); // buffer free
+	$buffermin = substr($logdata[0]['buffer_minimal'], 0, strlen($logdata[0]['buffer_minimal'])); // buffer min
+	$bufferused = substr($logdata[0]['buffer_used'], 0, strlen($logdata[0]['buffer_used'])); // buffer used
 	$last_error_code = substr($logdata[0]['last_error_code'], 0, strlen($logdata[0]['last_error_code'])); // last error code - what codes are there?
 }			
 	
@@ -329,6 +332,9 @@ switch ($cmd) {
 		echo "</camogm_datarate>";
 		echo "<coringindex>".elphel_get_P_value(ELPHEL_CORING_INDEX)."</coringindex>";
 		echo "<bufferoverruns>".$bufferoverruns."</bufferoverruns>";
+		echo "<bufferfree>".$bufferfree."</bufferfree>";
+		echo "<buffermin>".$buffermin."</buffermin>";
+		echo "<bufferused>".$bufferused."</bufferused>";
 		echo "<last_error_code>".$last_error_code."</last_error_code>";
 		echo "<trigger>".elphel_get_P_value(ELPHEL_TRIG)."</trigger>";
 		echo "<trigger_period>".elphel_get_P_value(ELPHEL_TRIG_PERIOD)."</trigger_period>";
