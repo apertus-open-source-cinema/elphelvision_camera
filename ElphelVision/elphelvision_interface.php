@@ -280,6 +280,8 @@ switch ($cmd) {
 	default:
 		echo "<image_width>".elphel_get_P_value(ELPHEL_WOI_WIDTH)."</image_width>\n";
 		echo "<image_height>".elphel_get_P_value(ELPHEL_WOI_HEIGHT)."</image_height>\n";
+		echo "<WOI_top>".elphel_get_P_value(ELPHEL_WOI_TOP)."</WOI_top>\n";
+		echo "<WOI_left>".elphel_get_P_value(ELPHEL_WOI_LEFT)."</WOI_left>\n";
 		echo "<fps>".elphel_get_P_value(ELPHEL_FP1000S)."</fps>\n";
 		echo "<jpeg_quality>".elphel_get_P_value(ELPHEL_QUALITY)."</jpeg_quality>\n";
 		echo "<exposure>".elphel_get_P_value(ELPHEL_EXPOS)."</exposure>\n";
